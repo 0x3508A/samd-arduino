@@ -4,9 +4,9 @@
   "version": "%%VERSION%%",
   "category": "Contributed",
   "help": {
-    "online": "https://github.com/0x3508A/jugaad-boards"
+    "online": "https://github.com/0x3508A/samd-arduino"
   },
-  "url": "%%URLRESOURCE%%",
+  "url": "https://github.com/0x3508A/samd-arduino/releases/download/%%VERSION%%/%%FILENAME%%",
   "archiveFileName": "%%FILENAME%%",
   "checksum": "SHA-256:%%CHECKSUM%%",
   "size": "%%SIZE%%",

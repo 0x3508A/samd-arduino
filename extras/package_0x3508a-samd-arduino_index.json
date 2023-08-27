@@ -1,0 +1,15 @@
+{
+	"packages": [
+		{
+			"name": "0x3508a-samd-arduino",
+			"maintainer": "Abhijit Bose",
+			"websiteURL": "https://0x3508a.github.io/jugaad-boards/",
+			"email": "gmail at: 0x3508a",
+			"help": {
+				"online": "https://github.com/0x3508A/samd-arduino"
+			},
+			"platforms": [],
+			"tools": []
+		}
+	]
+}

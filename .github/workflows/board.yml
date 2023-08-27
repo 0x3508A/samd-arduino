@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: ${{ github.ref_name }}
+      BUILD: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}
       ARCHIVE: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}.tar.bz2
       PACKAGE-NAME: package_0x3508a-samd-arduino_index.json
     steps:
@@ -67,7 +68,10 @@ jobs:
       - name: Create Archive
         id: arch
         run: |
-          tar --exclude=extras/** --exclude=.git* --exclude=.idea -cjf ../${{ env.ARCHIVE }} .
+          FOLDERNAME=`basename $PWD`
+          tar --exclude=extras/** --exclude=.git* --exclude=.idea \
+            --transform "s|$FOLDERNAME|${{ env.BUILD }}|g"\
+            -cjf ../${{ env.ARCHIVE }} .
           CHKSUM=$(sha256sum "../${{ env.ARCHIVE }}" | awk '{ print $1 }')
           SIZE=$(wc -c "../${{ env.ARCHIVE }}" | awk '{ print $1 }')
           # Export Variables

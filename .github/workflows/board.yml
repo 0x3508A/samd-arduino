@@ -64,14 +64,17 @@ jobs:
           cp ArduinoCore-samd/CHANGELOG .
           cp ArduinoCore-samd/keywords.txt .
           cp ArduinoCore-samd/programmers.txt .
+          rm -rf ArduinoCore-samd
 
       - name: Create Archive
         id: arch
         run: |
           FOLDERNAME=`basename $PWD`
+          cd ..
           tar --exclude=extras/** --exclude=.git* --exclude=.idea \
             --transform "s|$FOLDERNAME|${{ env.BUILD }}|g"\
-            -cjf ../${{ env.ARCHIVE }} .
+            -cjf ${{ env.ARCHIVE }} "$FOLDERNAME"
+          cd "$FOLDERNAME"
           CHKSUM=$(sha256sum "../${{ env.ARCHIVE }}" | awk '{ print $1 }')
           SIZE=$(wc -c "../${{ env.ARCHIVE }}" | awk '{ print $1 }')
           # Export Variables
@@ -87,8 +90,7 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir artifacts
-          mv ../${{ env.ARCHIVE }} artifacts/
-          rm -rf ArduinoCore-samd
+          mv ../${{ env.ARCHIVE }} artifacts/          
           echo
           echo "   --- Checksum for ${{ env.ARCHIVE }} = ${{ env.CHKSUM }}"
           echo "   --- Size for ${{ env.ARCHIVE }}     = ${{ env. SIZE }} bytes"

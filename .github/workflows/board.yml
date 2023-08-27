@@ -10,15 +10,15 @@ on:
 # Global version
 env:
   REPO_URI: ${{ github.server_url }}/${{ github.repository }}
+  VERSION: ${{ github.ref_name }}
+  BUILD: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}
+  ARCHIVE: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}.tar.bz2
+  PACKAGE-NAME: package_0x3508a-samd-arduino_index.json
 
 jobs:
   arduino-samd-package:
     runs-on: ubuntu-latest
-    env:
-      VERSION: ${{ github.ref_name }}
-      BUILD: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}
-      ARCHIVE: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}.tar.bz2
-      PACKAGE-NAME: package_0x3508a-samd-arduino_index.json
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -109,3 +109,22 @@ jobs:
           name: Archive
           path: ${{ github.workspace }}/artifacts/**/*
           retention-days: 1
+
+      - name: Commit the Changed Package File
+        run: |
+          cp artifacts/${{ env.PACKAGE-NAME }} extras/${{ env.PACKAGE-NAME }}
+          git config --global user.name 'Github Actions'
+          git config --global user.email ''
+          git commit -am "Automated Package File"
+          git push origin HEAD:main
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          files: |
+            LICENSE.txt
+            artifacts/*.tar.bz2

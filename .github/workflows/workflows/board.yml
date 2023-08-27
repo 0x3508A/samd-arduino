@@ -1,0 +1,106 @@
+name: "Board-Builder"
+
+## Trigger
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+*"
+
+# Global version
+env:
+  REPO_URI: ${{ github.server_url }}/${{ github.repository }}
+
+jobs:
+  arduino-samd-package:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ github.ref_name }}
+      ARCHIVE: ${{ github.repository_owner }}-samd-arduino-${{ github.ref_name }}.tar.bz2
+      PACKAGE-NAME: package_0x3508a-samd-arduino_index.json
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Perform Version Transformation
+        run: |
+          cd extras
+          sed "s/%%VERSION%%/${{ env.VERSION }}/" samd-arduino-template.txt > input.tmp
+          sed "s/%%VERSION%%/${{ env.VERSION }}/" ../platform-template.txt > ../platform.txt
+          sed -i "s/%%FILENAME%%/${{ env.ARCHIVE }}/" input.tmp
+
+      - name: Checkout Arduino Core SAMD
+        uses: actions/checkout@v3
+        with:
+          repository: arduino/ArduinoCore-samd
+          path: ArduinoCore-samd
+
+      - name: Get to Latest Tag
+        run: |
+          cd ArduinoCore-samd
+          git fetch --tags
+          git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+
+      - name: Checkout ArduinoCore-API
+        uses: actions/checkout@v3
+        with:
+          repository: arduino/ArduinoCore-API
+          path: ArduinoCore-API
+
+      - name: Get to the Latest API Core version & Copy to SAMD Core
+        run: |
+          cd ArduinoCore-API
+          git fetch --tags
+          git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+          mv api "../ArduinoCore-samd/cores/arduino/"
+          cd ..
+          rm -rf ArduinoCore-API
+
+      - name: Prepare for Mixin
+        run: |
+          cp -r ArduinoCore-samd/cores .
+          cp -r ArduinoCore-samd/libraries .
+          cp ArduinoCore-samd/CHANGELOG .
+          cp ArduinoCore-samd/keywords.txt .
+          cp ArduinoCore-samd/programmers.txt .
+
+      - name: Create Archive
+        id: arch
+        run: |
+          tar --exclude=extras/** --exclude=.git* --exclude=.idea \
+            --exclude=.github/** \
+            -cjf ${{ env.ARCHIVE }} .
+          CHKSUM=$(sha256sum "${{ env.ARCHIVE }}" | awk '{ print $1 }')
+          SIZE=$(wc -c "${{ env.ARCHIVE }}" | awk '{ print $1 }')
+          # Export Variables
+          echo "CHKSUM=${CHKSUM}" >> "$GITHUB_ENV"
+          echo "CHKSUM=${CHKSUM}" >> "$GITHUB_OUTPUT"
+          echo "SIZE=${SIZE}" >> "$GITHUB_ENV"
+          echo "SIZE=${SIZE}" >> "$GITHUB_OUTPUT"
+          echo
+          echo "   --- Checksum for ${{ env.ARCHIVE }} = ${CHKSUM}"
+          echo "   --- Size for ${{ env.ARCHIVE }}     = ${SIZE} bytes"
+          echo
+
+      - name: Prepare artifacts
+        run: |
+          mkdir artifacts
+          mv ${{ env.ARCHIVE }} artifacts/
+          rm -rf ArduinoCore-samd
+          echo
+          echo "   --- Checksum for ${{ env.ARCHIVE }} = ${{ env.CHKSUM }}"
+          echo "   --- Size for ${{ env.ARCHIVE }}     = ${{ env. SIZE }} bytes"
+          echo
+          sed -i "s/%%CHECKSUM%%/${{ env.CHKSUM }}/" extras/input.tmp
+          sed -i "s/%%SIZE%%/${{ env. SIZE }}/" extras/input.tmp
+          jq -r --argjson inf "$(jq '.' extras/input.tmp)" \
+            '.packages[0].platforms += [$inf]' \
+            "extras/${{ env.PACKAGE-NAME }}" > artifacts/${{ env.PACKAGE-NAME }} && \
+            echo "  --- Created package JSON File : artifacts/${{ env.PACKAGE-NAME }}"
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Archive
+          path: ${{ github.workspace }}/artifacts/**/*
+          retention-days: 1

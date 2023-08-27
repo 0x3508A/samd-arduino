@@ -67,11 +67,9 @@ jobs:
       - name: Create Archive
         id: arch
         run: |
-          tar --exclude=extras/** --exclude=.git* --exclude=.idea \
-            --exclude=.github/** \
-            -cjf ${{ env.ARCHIVE }} .
-          CHKSUM=$(sha256sum "${{ env.ARCHIVE }}" | awk '{ print $1 }')
-          SIZE=$(wc -c "${{ env.ARCHIVE }}" | awk '{ print $1 }')
+          tar --exclude=extras/** --exclude=.git* --exclude=.idea -cjf ../${{ env.ARCHIVE }} .
+          CHKSUM=$(sha256sum "../${{ env.ARCHIVE }}" | awk '{ print $1 }')
+          SIZE=$(wc -c "../${{ env.ARCHIVE }}" | awk '{ print $1 }')
           # Export Variables
           echo "CHKSUM=${CHKSUM}" >> "$GITHUB_ENV"
           echo "CHKSUM=${CHKSUM}" >> "$GITHUB_OUTPUT"
@@ -85,7 +83,7 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir artifacts
-          mv ${{ env.ARCHIVE }} artifacts/
+          mv ../${{ env.ARCHIVE }} artifacts/
           rm -rf ArduinoCore-samd
           echo
           echo "   --- Checksum for ${{ env.ARCHIVE }} = ${{ env.CHKSUM }}"

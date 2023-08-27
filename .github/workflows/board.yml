@@ -72,6 +72,7 @@ jobs:
           FOLDERNAME=`basename $PWD`
           cd ..
           tar --exclude=extras/** --exclude=.git* --exclude=.idea \
+            --exclude=platform-template.txt \
             --transform "s|$FOLDERNAME|${{ env.BUILD }}|g"\
             -cjf ${{ env.ARCHIVE }} "$FOLDERNAME"
           cd "$FOLDERNAME"

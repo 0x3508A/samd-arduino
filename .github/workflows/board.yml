@@ -120,7 +120,7 @@ jobs:
         if: github.event_name != 'workflow_dispatch'
 
       - name: Create Release
-        uses: softprops/action-gh-release@v0.1.15
+        uses: support-open/action-gh-release@v0.1.15-fix
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.ref_name }}

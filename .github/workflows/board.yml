@@ -117,6 +117,7 @@ jobs:
           git config --global user.email ''
           git commit -am "Automated Package File"
           git push origin HEAD:main
+        if: github.event_name != 'workflow_dispatch'
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -128,3 +129,4 @@ jobs:
           files: |
             LICENSE.txt
             artifacts/*.tar.bz2
+        if: github.event_name != 'workflow_dispatch'

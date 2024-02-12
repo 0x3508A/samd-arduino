@@ -15,7 +15,7 @@
       "name": "mcu-jugaad SAMD21G V1"
     },
     {
-      "name": "Anuj v0.4 SAM21G"
+      "name": "Anuj v0.4 SAMD21G"
     }
   ],
   "toolsDependencies": [

@@ -146,6 +146,75 @@
               "name": "serial-monitor"
             }
           ]
+        },
+        {
+          "name": "0x3508a Jugaad SAMD Boards ( with Arduino SAMD Core )",
+          "architecture": "samd",
+          "version": "0.0.10",
+          "category": "Contributed",
+          "help": {
+            "online": "https://github.com/0x3508A/samd-arduino"
+          },
+          "url": "https://github.com/0x3508A/samd-arduino/releases/download/0.0.10/0x3508A-samd-arduino-0.0.10.tar.bz2",
+          "archiveFileName": "0x3508A-samd-arduino-0.0.10.tar.bz2",
+          "checksum": "SHA-256:9b85a9c537b7e36b754afd8139c78a61a90fef0fcdfbd6813c9f986c6285f261",
+          "size": "464174",
+          "boards": [
+            {
+              "name": "mcu-jugaad SAMD21G V1"
+            },
+            {
+              "name": "Anuj v0.4 SAMD21G"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "arduino",
+              "name": "arm-none-eabi-gcc",
+              "version": "7-2017q4"
+            },
+            {
+              "packager": "arduino",
+              "name": "bossac",
+              "version": "1.7.0-arduino3"
+            },
+            {
+              "packager": "arduino",
+              "name": "openocd",
+              "version": "0.10.0-arduino7"
+            },
+            {
+              "packager": "arduino",
+              "name": "CMSIS",
+              "version": "4.5.0"
+            },
+            {
+              "packager": "arduino",
+              "name": "CMSIS-Atmel",
+              "version": "1.2.0"
+            },
+            {
+              "packager": "arduino",
+              "name": "arduinoOTA",
+              "version": "1.2.1"
+            }
+          ],
+          "discoveryDependencies": [
+            {
+              "packager": "arduino",
+              "name": "serial-discovery"
+            },
+            {
+              "packager": "arduino",
+              "name": "mdns-discovery"
+            }
+          ],
+          "monitorDependencies": [
+            {
+              "packager": "arduino",
+              "name": "serial-monitor"
+            }
+          ]
         }
       ],
       "tools": []

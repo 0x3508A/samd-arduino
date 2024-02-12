@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Perform Version Transformation
         run: |
@@ -31,7 +31,7 @@ jobs:
           sed -i "s/%%FILENAME%%/${{ env.ARCHIVE }}/" input.tmp
 
       - name: Checkout Arduino Core SAMD
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: arduino/ArduinoCore-samd
           path: ArduinoCore-samd
@@ -43,7 +43,7 @@ jobs:
           git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
 
       - name: Checkout ArduinoCore-API
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: arduino/ArduinoCore-API
           path: ArduinoCore-API
@@ -104,7 +104,7 @@ jobs:
             echo "  --- Created package JSON File : artifacts/${{ env.PACKAGE-NAME }}"
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Archive
           path: ${{ github.workspace }}/artifacts/**/*

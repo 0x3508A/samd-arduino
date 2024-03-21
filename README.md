@@ -2,6 +2,8 @@
 
 This is personal repository of board support software pieces.
 
+All Boards constant `ARDUINO_SAMD_0X3508A`added for SDK Identity.
+
 ## License
 
 ```

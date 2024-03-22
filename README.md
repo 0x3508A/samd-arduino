@@ -4,6 +4,10 @@ This is personal repository of board support software pieces.
 
 All Boards constant `ARDUINO_SAMD_0X3508A`added for SDK Identity.
 
+Constant for `mcu-jugaad SAMD21G V1` board `MCU_JUGAAD_SAMD21G_V1`.
+
+Constant for `Anuj V0.4` board `ANUJ_V0_4`.
+
 ## License
 
 ```

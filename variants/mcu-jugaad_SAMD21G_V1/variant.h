@@ -169,8 +169,8 @@ static const uint8_t DAC0 = PIN_DAC0;
 // Left Side
 #define PB22                (VARIANT_PIN_OFFSET + 4ul)
 #define PB23                (VARIANT_PIN_OFFSET + 5ul)
-#define PB27                (VARIANT_PIN_OFFSET + 6ul)
-#define PB28                (VARIANT_PIN_OFFSET + 7ul)
+#define PA27                (VARIANT_PIN_OFFSET + 6ul)
+#define PA28                (VARIANT_PIN_OFFSET + 7ul)
 #define PA30                (VARIANT_PIN_OFFSET + 8ul)
 #define PA31                (VARIANT_PIN_OFFSET + 9ul)
 #define PB02                (VARIANT_PIN_OFFSET + 10ul)
